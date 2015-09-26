@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class BaseHashSet<T> {
+public abstract class BaseHashSet<T> {
   protected ArrayList<T>[] table;
   protected int setSize;
 
@@ -12,7 +12,7 @@ public BaseHashSet(int capacity) {
       table[i] = new ArrayList<T>();
     }
  }
-  
+
  public boolean contains(T x){
 	 //Acquiring the Lock for node X
 	 acquire(x);
@@ -24,7 +24,7 @@ public BaseHashSet(int capacity) {
 		 release(x);
 	 }
  }
- 
+
  public boolean add(T x){
 	 boolean result false;
 	 acquire(x);
@@ -42,9 +42,9 @@ public BaseHashSet(int capacity) {
 		 release(x);
 	 }
 	 return result;
-	 
+
  }
 
- 
- 
+
+
 } //Class
