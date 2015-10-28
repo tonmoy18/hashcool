@@ -86,7 +86,7 @@ public class LockFreeList<T> {
         curr = curr.next.getReference();
         Node succ = curr.next.get(marked);
       }
-      return (curr.key == key && !marked[0])
+      return (curr.key == key && !marked[0]);
     }
   }
 
