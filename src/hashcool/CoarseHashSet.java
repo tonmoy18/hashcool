@@ -1,3 +1,4 @@
+package hashcool;
 import java.util.concurrent.locks.*;
 
 public class CoarseHashSet<T> extends BaseHashSet<T> {
@@ -44,5 +45,26 @@ public class CoarseHashSet<T> extends BaseHashSet<T> {
 		 return result;
 
 	 }
+	 
+	 
+	 public boolean remove(T x) {
+		 boolean result = false;
+		 acquire(x);
+		 try{
+			 int myBucket = Math.abs(x.hashCode() % table.length);
+			 if(table[myBucket].contains(x) == true)
+			 {
+				 table[myBucket].remove(x);
+				 result = true;
+				 totalNodeSize--;
+			 }
+		 }
+		 finally
+		 {
+			 release(x);
+		 }
+		 return result;
+	 }
+	 
 
 }

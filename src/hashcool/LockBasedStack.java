@@ -1,3 +1,4 @@
+package hashcool;
 import java.util.concurrent.locks.*;
 import java.util.EmptyStackException;
 
@@ -7,7 +8,7 @@ public class LockBasedStack<T> {
     public T value;
     public Node next;
     public Node(T value) {
-      value = value;
+      this.value = value;
       next = null;
     }
   }

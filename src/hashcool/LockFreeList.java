@@ -1,3 +1,4 @@
+package hashcool;
 import java.util.concurrent.atomic.*;
 
 public class LockFreeList<T> {

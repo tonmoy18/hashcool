@@ -1,3 +1,4 @@
+package hashcool;
 import java.util.*;
 
 public abstract class BaseHashSet<T> {
