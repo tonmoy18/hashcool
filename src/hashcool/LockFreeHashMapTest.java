@@ -9,7 +9,7 @@ public class LockFreeHashMapTest {
 	@Test
 	public void testIntegerHashMapOperations() {
 
-		LockFreeHashMap<Integer> h = new LockFreeHashMap<Integer>(8);
+		LockFreeHashSet<Integer> h = new LockFreeHashSet<Integer>(8);
 
 		int minLimit = Integer.MIN_VALUE + 1;
 		int maxLimit = Integer.MAX_VALUE - 1;

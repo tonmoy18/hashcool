@@ -4,21 +4,24 @@ public class HashMapCool {
 
 	/**
 	 * @param args
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 
 		System.out.println("This is the main program!");
+		
+		CoarseHashSet<Integer> coarseHashSet = new CoarseHashSet<Integer>(100000);
+		RefineableHashSet<Integer> refineableHashSet = new RefineableHashSet<Integer>(100000);
+		LockFreeHashSet<Integer> lockFreeHashSet = new LockFreeHashSet<Integer>(100000);
 
-		Benchmark benchmark = new Benchmark();
-
-		benchmark.runBenchmarks();
-
-		System.out.println("coarseHashSequentialAddTime= " + benchmark.coarseHashSequentialAddTime);
-		System.out.println("lockFreeHashSequentialAddTime= " + benchmark.lockFreeHashSequentialAddTime);
-		System.out.println("coarseHashRandomAddTime= " + benchmark.coarseHashRandomAddTime);
-		System.out.println("lockFreeHashRandomAddTime= " + benchmark.lockFreeHashRandomAddTime);
-		System.out.println("coarseHashSequentialRemoveTime= " + benchmark.coarseHashSequentialRemoveTime);
-		System.out.println("lockFreeHashSequentialRemoveTime= " + benchmark.lockFreeHashSequentialRemoveTime);
+		
+		RandomBenchmark randomBenchmark = new RandomBenchmark();
+		randomBenchmark.setNThreds(5);
+		
+		System.out.println(randomBenchmark.runBenchmark(coarseHashSet) + " nano seconds");
+		System.out.println(randomBenchmark.runBenchmark(refineableHashSet) + " nano seconds");
+		System.out.println(randomBenchmark.runBenchmark(lockFreeHashSet) + " nano seconds");
+		
 
 	}
 }

@@ -2,7 +2,7 @@ package hashcool;
 
 import java.util.*;
 
-public abstract class BaseHashSet<T> {
+public abstract class BaseHashSet<T> implements HashSet<T> {
 	protected ArrayList<T>[] table;
 	protected int setSize;
 	protected int totalNodeSize = 0;

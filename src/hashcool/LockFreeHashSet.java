@@ -1,12 +1,12 @@
 package hashcool;
 
-public class LockFreeHashMap<T> {
+public class LockFreeHashSet<T> implements HashSet<T> {
 	protected LockFreeList<T>[] table;
 	protected int setSize;
 	protected int totalNodeSize = 0;
 
 	@SuppressWarnings("unchecked")
-	public LockFreeHashMap(int capacity) {
+	public LockFreeHashSet(int capacity) {
 		table = (LockFreeList<T>[]) new LockFreeList[capacity];
 		setSize = 0;
 		for (int i = 0; i < capacity; i++) {

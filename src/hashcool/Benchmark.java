@@ -23,7 +23,7 @@ public class Benchmark {
 		coarseHashSequentialAddTime = System.currentTimeMillis() - time;
 
 		time = System.currentTimeMillis();
-		lockFreeHashSequentialAdd(new LockFreeHashMap<Integer>(numBuckets));
+		lockFreeHashSequentialAdd(new LockFreeHashSet<Integer>(numBuckets));
 		lockFreeHashSequentialAddTime = System.currentTimeMillis() - time;
 
 		time = System.currentTimeMillis();
@@ -31,7 +31,7 @@ public class Benchmark {
 		coarseHashRandomAddTime = System.currentTimeMillis() - time;
 
 		time = System.currentTimeMillis();
-		lockFreeHashRandomAdd(new LockFreeHashMap<Integer>(numBuckets));
+		lockFreeHashRandomAdd(new LockFreeHashSet<Integer>(numBuckets));
 		lockFreeHashRandomAddTime = System.currentTimeMillis() - time;
 
 		CoarseHashSet<Integer> coarseHashSet = new CoarseHashSet<Integer>(numBuckets);
@@ -40,7 +40,7 @@ public class Benchmark {
 		coarseHashSequentialRemove(coarseHashSet);
 		coarseHashSequentialRemoveTime = System.currentTimeMillis() - time;
 
-		LockFreeHashMap<Integer> lockFreeHashMap = new LockFreeHashMap<Integer>(numBuckets);
+		LockFreeHashSet<Integer> lockFreeHashMap = new LockFreeHashSet<Integer>(numBuckets);
 		lockFreeHashSequentialAdd(lockFreeHashMap);
 		time = System.currentTimeMillis();
 		lockFreeHashSequentialRemove(lockFreeHashMap);
@@ -54,7 +54,7 @@ public class Benchmark {
 		}
 	}
 
-	void lockFreeHashSequentialAdd(LockFreeHashMap<Integer> lockFreeHashMap) {
+	void lockFreeHashSequentialAdd(LockFreeHashSet<Integer> lockFreeHashMap) {
 		for (int i = 0; i < numKeys; i++) {
 			lockFreeHashMap.add(i);
 		}
@@ -66,7 +66,7 @@ public class Benchmark {
 		}
 	}
 
-	void lockFreeHashRandomAdd(LockFreeHashMap<Integer> lockFreeHashMap) {
+	void lockFreeHashRandomAdd(LockFreeHashSet<Integer> lockFreeHashMap) {
 		for (int i = 0; i < numKeys; i++) {
 			lockFreeHashMap.add(rand.nextInt());
 		}
@@ -78,7 +78,7 @@ public class Benchmark {
 		}
 	}
 
-	private void lockFreeHashSequentialRemove(LockFreeHashMap<Integer> lockFreeHashMap) {
+	private void lockFreeHashSequentialRemove(LockFreeHashSet<Integer> lockFreeHashMap) {
 		for (int i = 0; i < numKeys; i++) {
 			lockFreeHashMap.remove(i);
 		}
