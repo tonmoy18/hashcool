@@ -1,4 +1,5 @@
 package hashcool;
+
 import java.util.concurrent.atomic.*;
 
 public class LockFreeList<T> {
@@ -10,7 +11,8 @@ public class LockFreeList<T> {
 
 		Node(T item) {
 			this.item = item;
-			if (item != null) key = item.hashCode();
+			if (item != null)
+				key = item.hashCode();
 		}
 	}
 
@@ -23,7 +25,7 @@ public class LockFreeList<T> {
 		head.key = Integer.MIN_VALUE;
 		next.key = Integer.MAX_VALUE;
 		nextNext.key = Integer.MAX_VALUE;
-		
+
 		next.next = new AtomicMarkableReference<Node>(nextNext, false);
 		head.next = new AtomicMarkableReference<Node>(next, false);
 	}
@@ -106,6 +108,5 @@ public class LockFreeList<T> {
 		}
 		return (curr.key == key && !marked[0]);
 	}
-
 
 }
