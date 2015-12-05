@@ -2,29 +2,25 @@ package hashcool;
 
 import java.util.concurrent.atomic.*;
 
-public class LockFreeList<T> {
+public class LockFreeList<Tk, Tv> {
 
 	public class Node {
 		public int key;
 		public AtomicMarkableReference<Node> next;
-		T item;
+		Tv val;
 
-		Node(T item) {
-			this.item = item;
-			if (item != null)
-				key = item.hashCode();
+		Node(int key, Tv val) {
+			this.val = val;
+			this.key = key;
 		}
 	}
 
 	Node head;
 
 	public LockFreeList() {
-		head = new Node(null);
-		Node next = new Node(null);
-		Node nextNext = new Node(null);
-		head.key = Integer.MIN_VALUE;
-		next.key = Integer.MAX_VALUE;
-		nextNext.key = Integer.MAX_VALUE;
+		head = new Node(Integer.MIN_VALUE, null);
+		Node next = new Node(Integer.MAX_VALUE, null);
+		Node nextNext = new Node(Integer.MAX_VALUE, null);
 
 		next.next = new AtomicMarkableReference<Node>(nextNext, false);
 		head.next = new AtomicMarkableReference<Node>(next, false);
@@ -63,15 +59,15 @@ public class LockFreeList<T> {
 		}
 	}
 
-	public boolean add(T item) {
-		int key = item.hashCode();
+	public boolean add(Tk k, Tv v) {
+		int key = k.hashCode();
 		while (true) {
 			Window window = find(head, key);
 			Node pred = window.pred, curr = window.curr;
 			if (curr.key == key) {
 				return false;
 			} else {
-				Node node = new Node(item);
+				Node node = new Node(key, v);
 				node.next = new AtomicMarkableReference<Node>(curr, false);
 				if (pred.next.compareAndSet(curr, node, false, false)) {
 					return true;
@@ -80,8 +76,8 @@ public class LockFreeList<T> {
 		}
 	}
 
-	public boolean remove(T item) {
-		int key = item.hashCode();
+	public boolean remove(Tk k) {
+		int key = k.hashCode();
 		boolean snip;
 		while (true) {
 			Window window = find(head, key);
@@ -99,14 +95,27 @@ public class LockFreeList<T> {
 		}
 	}
 
-	public boolean contains(T item) {
+	public boolean contains(Tk k) {
 		boolean[] marked = { false };
-		int key = item.hashCode();
+		int key = k.hashCode();
 		Node curr = this.head;
 		while (curr.key < key) {
 			curr = curr.next.get(marked);
 		}
 		return (curr.key == key && !marked[0]);
+	}
+	
+	public Tv getVal(Tk k) {
+		boolean[] marked = { false };
+		int key = k.hashCode();
+		Node curr = this.head;
+		while (curr.key < key) {
+			curr = curr.next.get(marked);
+		}
+		if (curr.key == key && !marked[0]) {
+			return curr.val;
+		}
+		return null;
 	}
 
 }

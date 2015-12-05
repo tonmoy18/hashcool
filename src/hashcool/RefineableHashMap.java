@@ -3,12 +3,12 @@ package hashcool;
 import java.util.concurrent.atomic.AtomicMarkableReference;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class RefineableHashSet<T> extends BaseHashSet<T> {
+public class RefineableHashMap<Tk, Tv> extends BaseHashMap<Tk, Tv> {
 
 	AtomicMarkableReference<Thread> owner;
 	volatile ReentrantLock[] locks;
 
-	public RefineableHashSet(int capacity) {
+	public RefineableHashMap(int capacity) {
 		super(capacity);
 		locks = new ReentrantLock[capacity];
 		for (int i = 0; i < capacity; i++) {
@@ -17,7 +17,7 @@ public class RefineableHashSet<T> extends BaseHashSet<T> {
 		owner = new AtomicMarkableReference<Thread>(null, false);
 	}
 
-	public void acquire(T x) {
+	public void acquire(Tk x) {
 		boolean[] mark = { true };
 		Thread me = Thread.currentThread();
 		Thread who;
@@ -37,7 +37,7 @@ public class RefineableHashSet<T> extends BaseHashSet<T> {
 		}
 	}
 
-	public void release(T x) {
+	public void release(Tk x) {
 		locks[Math.abs(x.hashCode() % locks.length)].unlock();
 	}
 }

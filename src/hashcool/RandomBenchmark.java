@@ -13,16 +13,16 @@ public class RandomBenchmark {
 	int addPercent = 8;
 	int removePercent = 2;
 	
-	Random rand = new Random();
+	Random rand = new Random(System.nanoTime());
 	
 	void setNThreds(int n) {
 		nThreads = n;
 	}
 	
-	long runBenchmark(final HashSet<Integer> hashSet) throws InterruptedException {
+	long runBenchmark(final HashMap<Integer, Integer> hashMap) throws InterruptedException {
 		// initialize hashSet
 		for (int i = 0; i < maxData; i++) {
-			hashSet.add(i);
+			hashMap.add(i, 0);
 		}
 		
 		
@@ -48,13 +48,13 @@ public class RandomBenchmark {
 						int p = rand.nextInt(100);
 						if (p < containsPercent) {
 							// see if random number from 0 to maxData is in hash
-							hashSet.contains(rand.nextInt(maxData));
+							hashMap.contains(rand.nextInt(maxData));
 						} else if (p < containsPercent + addPercent) {
 							// add random integer from maxData to MAX_INT in hash
-							hashSet.contains(rand.nextInt(Integer.MAX_VALUE - maxData) + maxData);
+							hashMap.add(rand.nextInt(Integer.MAX_VALUE - maxData) + maxData, 0);
 						} else {
 							// remove random number from 0 to maxData from hash
-							hashSet.remove(rand.nextInt(maxData));
+							hashMap.remove(rand.nextInt(maxData));
 						}
 					}
 				});

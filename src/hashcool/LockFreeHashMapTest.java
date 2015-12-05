@@ -9,7 +9,7 @@ public class LockFreeHashMapTest {
 	@Test
 	public void testIntegerHashMapOperations() {
 
-		LockFreeHashSet<Integer> h = new LockFreeHashSet<Integer>(8);
+		LockFreeHashMap<Integer,Integer> h = new LockFreeHashMap<Integer, Integer>(8);
 
 		int minLimit = Integer.MIN_VALUE + 1;
 		int maxLimit = Integer.MAX_VALUE - 1;
@@ -19,11 +19,15 @@ public class LockFreeHashMapTest {
 		assertFalse(h.contains(maxLimit));
 
 		for (int i = 0; i < 32; i++) {
-			assertTrue(h.add(i));
+			assertTrue(h.add(i, 32 - i));
+		}
+		
+		for (int i = 0; i < 32; i++) {
+			assertTrue(32 - i == h.getVal(i));
 		}
 
 		for (int i = 0; i < 32; i += 5) {
-			assertFalse(h.add(i));
+			assertFalse(h.add(i, i));
 		}
 
 		for (int i = 0; i < 32; i++) {
@@ -43,7 +47,7 @@ public class LockFreeHashMapTest {
 		}
 
 		for (int i = 0; i < 32; i += 2) {
-			assertTrue(h.add(i));
+			assertTrue(h.add(i, 32 - i));
 		}
 
 		for (int i = 0; i < 32; i++) {

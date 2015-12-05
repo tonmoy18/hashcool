@@ -4,11 +4,11 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class CoarseHashSetTest {
+public class RefineableHashMapTest {
 
 	@Test
 	public void test() {
-		CoarseHashSet<Integer> h = new CoarseHashSet<Integer>(8);
+		RefineableHashMap<Integer, Integer> h = new RefineableHashMap<Integer, Integer>(8);
 
 		int minLimit = Integer.MIN_VALUE + 1;
 		int maxLimit = Integer.MAX_VALUE - 1;
@@ -18,11 +18,11 @@ public class CoarseHashSetTest {
 		assertFalse(h.contains(maxLimit));
 
 		for (int i = 0; i < 32; i++) {
-			assertTrue(h.add(i));
+			assertTrue(h.add(i, 32 - i));
 		}
 
 		for (int i = 0; i < 32; i += 5) {
-			assertFalse(h.add(i));
+			assertFalse(h.add(i, i));
 		}
 
 		for (int i = 0; i < 32; i++) {
@@ -42,7 +42,7 @@ public class CoarseHashSetTest {
 		}
 
 		for (int i = 0; i < 32; i += 2) {
-			assertTrue(h.add(i));
+			assertTrue(h.add(i, 32 - i));
 		}
 
 		for (int i = 0; i < 32; i++) {
