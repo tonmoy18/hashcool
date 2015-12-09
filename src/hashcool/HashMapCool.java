@@ -8,17 +8,35 @@ public class HashMapCool {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 		
-		int capacity = 10;
+		System.out.println("This is the main program!");
 		
-		CoarseHashMap<String, Integer> coarseHashMap = new CoarseHashMap<String, Integer>(capacity);
+		int[] caps = {666666};
+		int[] tn = {7};
 		
-		coarseHashMap.add("A", 1);
 		
-		// you need to remove old value before adding new value!!!
-		coarseHashMap.remove("A");
-		coarseHashMap.add("A", 2);
+		for (int cap_i = 0; cap_i < caps.length; cap_i++) {
+			for (int tn_i = 0; tn_i < tn.length; tn_i++) {
+				CoarseHashMap<Integer, Integer> coarseHashSet = new CoarseHashMap<Integer, Integer>(caps[cap_i]);
+				RefineableHashMap<Integer, Integer> refineableHashSet = new RefineableHashMap<Integer, Integer>(caps[cap_i]);
+				LockFreeHashMap<Integer, Integer> lockFreeHashSet = new LockFreeHashMap<Integer, Integer>(caps[cap_i]);
+//				STMHashMap<Integer, Integer> stmhashmap = new STMHashMap<Integer, Integer>();
+
+				
+				RandomBenchmark randomBenchmark = new RandomBenchmark();
+				randomBenchmark.setNThreds(tn[tn_i]);
+				
+//				System.out.println("Lock Free: " + randomBenchmark.runBenchmark(lockFreeHashSet)/1000 + " milli seconds");
+//				System.out.println("capacity: " + caps[cap_i] + " \n" + "number of threads: " + tn[tn_i]);
+//				System.out.println("Coarse: " + randomBenchmark.runBenchmark(coarseHashSet)/1000 + " milli seconds");
+				System.out.println("Fine: " + randomBenchmark.runBenchmark(refineableHashSet)/1000 + " milli seconds");
+//				System.out.println("STM: " + randomBenchmark.runBenchmark(stmhashmap)/1000 + " milli seconds");
+				
+				System.out.println();
+			}
+		}
 		
-		System.out.println(coarseHashMap.getVal("A"));
+		
+		
 		
 
 	}
