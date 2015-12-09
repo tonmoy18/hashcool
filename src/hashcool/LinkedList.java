@@ -30,8 +30,15 @@ public class LinkedList<Tk, Tv> {
 			pred = curr;
 			curr = curr.next;
 		}
-		if (key == curr.key) {
+		if (key == curr.key && v == curr.val) {
+			//System.out.println("Current Key = " + curr.key + "& Value = " + curr.val);
 			return false;
+		}
+		else if(key == curr.key && v != curr.val) {
+			//Update the value
+			//System.out.println("Current Key = " + curr.key + "& Value = " + curr.val);
+			curr.val = v;
+			return true;
 		}
 		else {
 			Node node = new Node(key, v);
@@ -52,6 +59,22 @@ public class LinkedList<Tk, Tv> {
 			curr=curr.next;
 		}
 		return false;
+		
+	}
+	
+	public int containsWithSameValue(Tk k, Tv v) {
+		Node curr = head;
+		int key = k.hashCode();
+		while (curr.key <= key) {
+			if (curr.key == key && curr.val == v) {
+				return 1;
+			}
+			if (curr.key == key && curr.val != v) {
+				return -1;
+			}
+			curr=curr.next;
+		}
+		return 0;
 		
 	}
 	

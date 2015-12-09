@@ -2,6 +2,7 @@ package hashcool;
 
 import java.util.concurrent.atomic.*;
 
+
 public class LockFreeList<Tk, Tv> {
 
 	public class Node {
@@ -65,8 +66,13 @@ public class LockFreeList<Tk, Tv> {
 			Window window = find(head, key);
 			Node pred = window.pred, curr = window.curr;
 			if (curr.key == key) {
+			//if (key == curr.key && v == curr.val) { trying
 				return false;
-			} else {
+			} 
+			/*else if(key == curr.key && v != curr.val) { trying
+				
+			}*/
+			else {
 				Node node = new Node(key, v);
 				node.next = new AtomicMarkableReference<Node>(curr, false);
 				if (pred.next.compareAndSet(curr, node, false, false)) {
@@ -105,6 +111,23 @@ public class LockFreeList<Tk, Tv> {
 		return (curr.key == key && !marked[0]);
 	}
 	
+	public int containsWithSameValue(Tk k, Tv v) {
+		boolean[] marked = { false };
+		Node curr = this.head;
+		int key = k.hashCode();
+		while (curr.key <= key) {
+			System.out.println("Curr Key = " +curr.key +" and Value = "+curr.val);
+			if (curr.key == key && curr.val == v && !marked[0]) {
+				return 1;
+			}
+			if (curr.key == key && curr.val != v) {
+				return -1;
+			}
+			curr = curr.next.get(marked);
+		}
+		return 0;
+	}
+		
 	public Tv getVal(Tk k) {
 		boolean[] marked = { false };
 		int key = k.hashCode();
