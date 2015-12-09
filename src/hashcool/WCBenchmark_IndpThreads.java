@@ -44,7 +44,8 @@ public class WCBenchmark_IndpThreads {
 			
 			boolean finishFlag = false;
 			 // The name of the file to open.
-			String fileName = "dictionary.txt";
+			//"dicExtra.txt";
+			String fileName = "dictionary_200k.txt";
 	        //String fileName = "dictionary1.txt";
 
 	        // This will reference one line at a time
@@ -103,7 +104,7 @@ public class WCBenchmark_IndpThreads {
 		return vec;
 	}
 	
-	public int runBenchMarkPart2(Vector<String> vec, final HashMap<String, Integer> hashMap, boolean isLockFree) throws InterruptedException
+	public int runBenchMarkPart2(final Vector<String> vec, final HashMap<String, Integer> hashMap, final boolean isLockFree) throws InterruptedException
 	{
 		//Splitting up the words evenly among 5 threads
         int totalWords = vec.size();
@@ -112,24 +113,24 @@ public class WCBenchmark_IndpThreads {
 	    //System.out.println("Total Words = " +totalWords+ "....per thread = " + wordsPerThread );
 	    
 	    //Thread 1
-	    int startIdx1 =0;
-	    int endIdx1 = wordsPerThread-1;
+	    final int startIdx1 =0;
+	    final int endIdx1 = wordsPerThread-1;
 	    
 	    //Thread2
-	    int stIdx2 = endIdx1 +1;
-	    int endIdx2 = (wordsPerThread*2) -1;
+	    final int stIdx2 = endIdx1 +1;
+	    final int endIdx2 = (wordsPerThread*2) -1;
 	    
 	    //Thread3
-	    int stIdx3 = endIdx2 +1;
-	    int endIdx3 = (wordsPerThread*3) -1;
+	    final int stIdx3 = endIdx2 +1;
+	    final int endIdx3 = (wordsPerThread*3) -1;
 	    
 	    //Thread4
-	    int stIdx4 = endIdx3 +1;
-	    int endIdx4 = (wordsPerThread*4) -1;
+	    final int stIdx4 = endIdx3 +1;
+	    final int endIdx4 = (wordsPerThread*4) -1;
 	    
 	    //Thread5 gives the remainder workload too
-	    int stIdx5 = endIdx4 +1;
-	    int endIdx5 = (wordsPerThread*5) -1 + remaindingWords; //Should equal totalWords
+	    final int stIdx5 = endIdx4 +1;
+	    final int endIdx5 = (wordsPerThread*5) -1 + remaindingWords; //Should equal totalWords
 
 		 //if(finishFlag == true){		    
 		    
@@ -330,18 +331,21 @@ public class WCBenchmark_IndpThreads {
 	}
 	
 	public static void main(String[] args) {
-		int runsForAvg = 1000;
-		//Capacity sizes: 50000, 100000, 500000, 1000000
-		int maxSize = 1000000; 
+		int runsForAvg = 10;
+		//Capacity sizes: 100, 1000, 5000, 10000
+		int maxSize = 10000; 
+		
 		WCBenchmark_IndpThreads bmObj = new WCBenchmark_IndpThreads();
-		CoarseHashMap<String, Integer> coarseHashMap = new CoarseHashMap<String, Integer>(maxSize);
-		RefineableHashMap<String, Integer> fineHashMap = new RefineableHashMap<String, Integer>(maxSize);
-		LockFreeHashMap<String, Integer> lockFreeHashMap = new LockFreeHashMap<String, Integer>(maxSize);
+//		STMHashMap<String, Integer> coarseHashMap = new STMHashMap<String, Integer>();
+//		RefineableHashMap<String, Integer> fineHashMap = new RefineableHashMap<String, Integer>(maxSize);
+//		LockFreeHashMap<String, Integer> lockFreeHashMap = new LockFreeHashMap<String, Integer>(maxSize);
+		STMHashMap<String, Integer> stmHashMap = new STMHashMap<String, Integer>();
+		
 		//bmObj.setNThreds(5);
 		bmObj.setMaxDataSize(maxSize);
 		long execTime =0;
 		long totalTime =0;
-		int uniqueWordCnt =0;
+		int uniqueWordCnt1 =0;
 		try {
 			// run 10 times (then avg the results)
 			for (int iRuns = 0; iRuns < runsForAvg; iRuns++) {
@@ -349,10 +353,11 @@ public class WCBenchmark_IndpThreads {
 				//System.out.println("Busy ... loop iteration #" + iRuns + " out of " + runsForAvg);
 				
 				Vector<String> vec = bmObj.runBenchmark();
-				//TODO: Replace with the other hash maps: Coarse, Refineable, Lockfree. Change the maxSize
-				//bmObj.runBenchMarkPart2(vec, coarseHashMap, false);
-				//bmObj.runBenchMarkPart2(vec, fineHashMap, false);
-				uniqueWordCnt = bmObj.runBenchMarkPart2(vec, lockFreeHashMap, true);
+
+//				uniqueWordCnt1 = bmObj.runBenchMarkPart2(vec, coarseHashMap, true);
+				//uniqueWordCnt1 = bmObj.runBenchMarkPart2(vec, fineHashMap, true);
+				//uniqueWordCnt1 = bmObj.runBenchMarkPart2(vec, lockFreeHashMap, true);
+				uniqueWordCnt1 = bmObj.runBenchMarkPart2(vec, stmHashMap, true);
 				long timeTaken = System.nanoTime() - startTimer;
 				totalTime += timeTaken;
 			}
@@ -361,7 +366,7 @@ public class WCBenchmark_IndpThreads {
 			System.out.println("Total Time for Adding Words = " + execTime +" ns.");
 			execTime = TimeUnit.MILLISECONDS.convert(execTime, TimeUnit.NANOSECONDS);
 			System.out.println("Total Time for Adding Words = " + execTime +" ms.");
-			System.out.println("Unique Word Count = " + uniqueWordCnt);
+			System.out.println("Unique Word Count = " + uniqueWordCnt1);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

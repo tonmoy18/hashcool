@@ -124,6 +124,8 @@ public class HashMapCool {
 		}
 	}
 
+	
+	
 	public static void main(String[] args) throws InterruptedException {
 
 		randomIntTest();
